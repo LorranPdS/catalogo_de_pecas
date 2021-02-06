@@ -1,5 +1,5 @@
 # catalogo_de_pecas
-#FUNCIONAMENTO DO CATÁLOGO DE PEÇAS
+FUNCIONAMENTO DO CATÁLOGO DE PEÇAS
 Code Challenge - Zen S.A.
 
 1. Tecnologias utilizadas
@@ -16,6 +16,7 @@ username 'postgres' e password 'admin', conforme configurado no arquivo applicat
 do projeto.
 
 3. Utilização do sistema
+
 3.1 - Ao subir o projeto, basta colocar o endereço do repositório local na URL
 (localhost:8080 no meu caso) para ser direcionado à página Index do sistema.
 
