@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+<style type="text/css">
+table.striped>tbody>tr:nth-child(odd) {
+ background-color:#E8E8E8;
+}
+table {
+	width: 80%;
+	margin-left: 8%;
+}
+table td, table th{
+border: 1px solid grey;
+text-align: center;
+}
+
+table th {
+	background: #B5B5B5;
+}
+</style>
+
+<title>Cadastro</title>
+</head>
+<body>
+<h1 align="center">Cadastro de Peça</h1>
+<br/>
+
+<div class="row">
+
+	<div th:each="m : ${msg}">
+		<span style="font-weight: bolder; margin-left: 10px; color: red;" 
+			th:text="${m}"></span>
+	</div>
+<br/>
+
+	<form action="/salvarproduto" method="post" th:object="${objetoProduto}" 
+		class="col s12" onsubmit="return validarPesos() ? true : false">
+
+		<div class="row">
+			<div class="input-field col s6">
+				<label for="nomePeca" class="active">Nome da peça</label>
+				<input name="nomePeca" th:field="*{nomePeca}" maxlength="200" 
+				autofocus="autofocus" required="required"/>
+			</div>
+
+			<div class="input-field col s6">
+				<label for="veiculoAplicacao" class="active">Veículo de aplicação da peça</label>
+				<input name="veiculoAplicacao" th:field="*{veiculoAplicacao}" maxlength="200" />
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="input-field col s6">
+				<label class="active">Peso Líquido</label>
+				<input type="number" step="0.01" name="pesoLiquido" th:field="*{pesoLiquido}"
+				 id="pesoLiquido" required="required" min="0.01"/>
+			</div>
+
+			<div class="input-field col s6">
+				<label class="active">Peso Bruto</label>
+				<input type="number" step="0.01" name="pesoBruto" th:field="*{pesoBruto}"
+					 id="pesoBruto" required="required" min="0.01"/>
+			</div>
+		</div>
+
+		<button class="waves-effect waves-light btn">Salvar</button>
+
+	</form>
+</div>
+
+<h1 align="center">Catálogo</h1>
+<br/>
+
+<table class="striped">
+	<thead>
+		<tr>
+			<th>Nome da Peça</th>
+			<th>Veículo</th>
+			<th>Peso Líquido</th>
+			<th>Peso Bruto</th>
+			<th>Ação</th>
+		</tr>
+	</thead>
+
+	<tr th:each = "produto : ${produtos.content}">
+		<td th:text = "${produto.nomePeca}"></td>
+		<td th:text = "${produto.veiculoAplicacao}"></td>
+		<td th:text = "${produto.pesoLiquido}"></td>
+		<td th:text = "${produto.pesoBruto}"></td>
+		<td><a th:href="@{/excluirProduto/{idproduto}(idproduto=${produto.id})}">Apagar</a></td>
+	</tr>
+</table>
+
+<div class="row" style="margin-top: 30px;" align="center">
+
+	<b>Páginas</b>
+	<br/>
+
+	<span th:if="${produtos.hasPrevious()}">
+		<a th:href="@{/produtospag(page=${produtos.number-1}, size=${produtos.size})}">Anterior</a>
+	</span>
+
+	<th:block th:each="i : ${#numbers.sequence(0, produtos.totalPages - 1)}">
+		<a th:href="@{/produtospag(page=${i}, size=${produtos.size})}">[[${i} + 1]]</a>
+	</th:block>
+
+	<span th:if="${produtos.hasNext()}">
+		<a th:href="@{/produtospag(page=${produtos.number+1}, size=${produtos.size})}">Próximo</a>
+	</span>
+</div>
+
+</body>
+<script type="text/javascript">
+
+function validarPesos(){
+	var pesoLiquido = parseFloat(document.getElementById('pesoLiquido').value);
+	var pesoBruto = parseFloat(document.getElementById('pesoBruto').value);
+	
+	if(pesoLiquido > pesoBruto){
+		alert('O valor informado para o peso líquido não pode ser maior que o valor informado para o peso bruto');
+		return false;
+	}
+	return true;
+}
+
+</script>
+</html>
